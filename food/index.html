@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6B1D2F">
+<meta name="description" content="Ziro 280 stay · neighbourhood guide for guests — DDP, Gwangjang Market, Euljiro, Myeongdong, Namdaemun, Seongsu, Hongdae and airport transport. 한국어 / English / 日本語 / 中文">
+<title>Ziro 280 stay · Around the stay</title>
+<!--
+  Ziro 280 stay · 4개국어 주변 가이드 (맛집·명소·교통)
+  · JavaScript 없이 동작합니다 (피클 앱 내장 뷰어 등 JS 차단 환경 호환).
+  · 맨 위 <input type=radio name="lang"> 4개 + CSS :checked 선택자로 언어를 바꿉니다.
+  · 개인정보(상세 주소·호실·연락처·비밀번호)는 넣지 않았습니다. 출발 기준은 DDP / 을지로 280 일대입니다.
+  · 영업시간·요금은 2026-11-20 확인 기준이며 현장 사정에 따라 달라질 수 있습니다.
+-->
+<style>
+  :root{
+    --burgundy:#6B1D2F; --burgundy-deep:#541624; --cream:#FAF7F2; --cream-text:#FBF4E9;
+    --charcoal:#231F20; --muted:#7C726E; --line:rgba(35,31,32,.09); --gold:#B08A4A;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;color-scheme:light}
+  body{
+    margin:0;background:var(--cream);color:var(--charcoal);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Hiragino Sans","Yu Gothic","Noto Sans JP","PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  b,strong{font-weight:700}
+  .sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);border:0;white-space:nowrap}
+
+  /* ---- pure-CSS language switch ---- */
+  .lang-panel{display:none}
+  .lang-panel[data-lang="ko"]{display:block}
+  #lang-en:checked ~ main > .lang-panel[data-lang="ko"],
+  #lang-ja:checked ~ main > .lang-panel[data-lang="ko"],
+  #lang-zh:checked ~ main > .lang-panel[data-lang="ko"]{display:none}
+  #lang-en:checked ~ main > .lang-panel[data-lang="en"],
+  #lang-ja:checked ~ main > .lang-panel[data-lang="ja"],
+  #lang-zh:checked ~ main > .lang-panel[data-lang="zh"]{display:block}
+
+  /* ---- header ---- */
+  .hdr{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,var(--burgundy) 0%,var(--burgundy-deep) 100%);
+       color:var(--cream-text);padding:11px 16px 10px;box-shadow:0 2px 16px rgba(35,31,32,.20)}
+  .hdr-in{display:flex;align-items:center;gap:10px;max-width:560px;margin:0 auto}
+  .mark{width:33px;height:33px;flex:0 0 auto;border-radius:10px;background:var(--cream-text);color:var(--burgundy);
+        display:grid;place-items:center;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:20px;line-height:1;padding-bottom:2px}
+  .brand-txt{display:flex;flex-direction:column;line-height:1.15}
+  .brand-txt strong{font-family:Georgia,"Times New Roman",serif;font-size:16.5px;letter-spacing:.02em}
+  .brand-txt span{font-size:8.5px;letter-spacing:.2em;opacity:.72;margin-top:3px;font-weight:600}
+  .langs{display:flex;gap:3px;margin:10px auto 0;max-width:560px;background:rgba(255,255,255,.13);padding:3px;border-radius:12px}
+  .langs label{flex:1 1 0;display:block;text-align:center;color:#F0E1CF;font:inherit;font-size:12px;font-weight:600;
+               padding:7px 2px;border-radius:9px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+  #lang-ko:checked ~ .hdr label[for="lang-ko"],#lang-en:checked ~ .hdr label[for="lang-en"],
+  #lang-ja:checked ~ .hdr label[for="lang-ja"],#lang-zh:checked ~ .hdr label[for="lang-zh"]{
+    background:var(--cream-text);color:var(--burgundy);box-shadow:0 1px 5px rgba(0,0,0,.22)}
+  main{max-width:560px;margin:0 auto;padding:0 16px 40px}
+
+  /* ---- hero ---- */
+  .hero{margin:14px 0 0;padding:22px 20px 20px;border-radius:22px;color:var(--cream-text);
+        background:radial-gradient(120% 90% at 100% 0%,#8B2741 0%,var(--burgundy) 42%,var(--burgundy-deep) 100%);
+        box-shadow:0 10px 24px rgba(35,31,32,.20);position:relative;overflow:hidden}
+  .hero:after{content:"";position:absolute;right:-40px;bottom:-70px;width:170px;height:170px;border-radius:50%;
+              background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)}
+  .kicker{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(251,244,233,.72);font-weight:700;margin:0 0 7px}
+  .hero h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.15;letter-spacing:.005em}
+  .hero .sub{margin:9px 0 0;font-size:13.5px;line-height:1.6;color:rgba(251,244,233,.90);max-width:33em}
+  .hero .base{margin:14px 0 0;padding-top:12px;border-top:1px solid rgba(251,244,233,.20);
+              font-size:11.5px;letter-spacing:.01em;color:rgba(251,244,233,.80);position:relative;z-index:1}
+
+  /* ---- chips ---- */
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:14px 0 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chips a{flex:0 0 auto;text-decoration:none;font-size:11.5px;font-weight:700;letter-spacing:.02em;
+           color:var(--burgundy);background:#fff;border:1px solid rgba(107,29,47,.18);padding:8px 13px;border-radius:999px;
+           box-shadow:0 1px 4px rgba(35,31,32,.05)}
+
+  /* ---- sections ---- */
+  .sec{padding-top:26px;scroll-margin-top:104px}
+  .sec-h{display:flex;align-items:flex-start;gap:11px;margin:0 0 12px}
+  .num{font-family:Georgia,"Times New Roman",serif;font-size:12.5px;font-weight:700;color:#fff;background:var(--burgundy);
+       border-radius:8px;padding:4px 7px;line-height:1;margin-top:4px;letter-spacing:.04em}
+  .sec-h h2{margin:0;font-size:17.5px;line-height:1.32;letter-spacing:-.005em}
+  .sec-h p{margin:2px 0 0;font-size:12px;color:var(--muted);letter-spacing:.01em}
+
+  /* ---- cards ---- */
+  .card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px 15px 13px;margin:0 0 10px;
+        box-shadow:0 2px 10px rgba(35,31,32,.045)}
+  .top{display:flex;align-items:baseline;justify-content:space-between;gap:9px;flex-wrap:wrap}
+  .card h3{margin:0;font-size:15.5px;line-height:1.35;letter-spacing:-.01em}
+  .card h3 em{font-style:normal;font-weight:500;font-size:12px;color:var(--muted);margin-left:4px;letter-spacing:0}
+  .pill{flex:0 0 auto;font-size:10.5px;font-weight:700;color:var(--burgundy);background:rgba(107,29,47,.07);
+        border:1px solid rgba(107,29,47,.13);border-radius:999px;padding:3px 8px;white-space:nowrap}
+  .meta{margin:7px 0 0;font-size:11.5px;color:#8B7E79;font-weight:600;letter-spacing:.01em}
+  .desc{margin:6px 0 0;font-size:13.5px;color:#453E3B;line-height:1.62}
+  .tips{margin:8px 0 0;padding:0 0 0 15px;font-size:12.5px;color:#5C534F;line-height:1.55}
+  .tips li{margin:2px 0}
+  .tips li::marker{color:var(--gold)}
+
+  /* ---- footer ---- */
+  .foot{margin:30px 0 0;padding:18px 2px 0;border-top:1px solid var(--line);font-size:11px;color:#8B7E79;line-height:1.7}
+  .foot strong{font-family:Georgia,"Times New Roman",serif;font-size:12.5px;color:var(--burgundy);letter-spacing:.03em}
+  .warn{background:#FFF6DF;border:1px solid #E2C47E;color:#7A5C10;border-radius:14px;padding:11px 13px;font-size:12px;line-height:1.55;margin:10px 0 0}
+  @media (max-width:360px){body{font-size:14.5px}.hero h1{font-size:24px}}
+  @media (prefers-color-scheme:dark){:root{color-scheme:light}}
+</style>
+</head>
+<body>
+<input type="radio" name="lang" id="lang-ko" class="sr" checked>
+<input type="radio" name="lang" id="lang-en" class="sr">
+<input type="radio" name="lang" id="lang-ja" class="sr">
+<input type="radio" name="lang" id="lang-zh" class="sr">
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="mark">Z</div>
+    <div class="brand-txt"><strong>Ziro 280 stay</strong><span>AROUND THE STAY</span></div>
+  </div>
+  <div class="langs">
+    <label for="lang-ko">한국어</label>
+    <label for="lang-en">English</label>
+    <label for="lang-ja">日本語</label>
+    <label for="lang-zh">中文</label>
+  </div>
+</header>
+<main>
+<div class="lang-panel" data-lang="ko">
+<section class="hero">
+<p class="kicker">DDP · 을지로 280</p>
+<h1>숙소 주변 한 바퀴</h1>
+<p class="sub">문 앞에서 걸어서, 지하철로 두세 정거장. 게스트를 위한 맛집·명소·교통 가이드입니다.</p>
+<p class="base">기준 · 동대문역사문화공원역(2·4·5호선) · DDP까지 도보 3분</p>
+</section>
+<nav class="chips">
+<a href="#ko-1">걸어서</a>
+<a href="#ko-2">4호선 · 명동</a>
+<a href="#ko-3">2호선 · 성수·홍대</a>
+<a href="#ko-4">교통·공항</a>
+</nav>
+<section class="sec" id="ko-1">
+<div class="sec-h"><span class="num">01</span><div><h2>걸어서 · 한 정거장</h2><p>DDP · 광장시장 · 을지로</p></div></div>
+<article class="card">
+<div class="top"><h3>동대문디자인플라자 (DDP) <em>DDP · 디자인스토어</em></h3><span class="pill">🚶 3분 · 200m</span></div>
+<p class="meta">🕒 매일 10:00–20:00 · 야외 광장은 상시 개방</p>
+<p class="desc">자하 하디드가 설계한 곡면 건물. 전시·마켓·팝업이 열리고, 조명이 켜지는 저녁 야경이 특히 좋습니다.</p>
+<ul class="tips"><li>지하 2층 어울림광장 'DDP 디자인스토어'에서 기념품·디자인 소품 구매</li><li>전시는 유료/무료가 섞여 있으니 입구 안내판 확인</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>광장시장 <em>Gwangjang Market</em></h3><span class="pill">🚶 24분 · 1.5km</span></div>
+<p class="meta">🕒 노점마다 다름 · 대체로 낮부터 21시 무렵까지</p>
+<p class="desc">빈대떡·육회·칼국수로 유명한 100년 넘은 전통시장. 좁은 통로에 노점 테이블이 늘어서 있고, 2층은 헌옷·한복 상가입니다.</p>
+<ul class="tips"><li>순희네빈대떡 10:00–21:00 · 부촌육회 10:00–21:00</li><li>노점에 따라 현금만 받는 곳이 있어 소액 현금을 챙기면 편합니다</li><li>주말 낮에는 줄이 길어요. 조금 이른 점심(11시 전)을 추천</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>을지로 노가리골목 · 만선호프 <em>Euljiro Nogari Alley</em></h3><span class="pill">🚇 2호선 2정거장 · 도보 27분</span></div>
+<p class="meta">🕒 저녁부터 자정 무렵까지 · 만선호프 12:00–24:00</p>
+<p class="desc">을지로3가 골목의 노포 맥주집 거리. 노가리·말린 오징어에 생맥주 한 잔, 서울에서 지금 가장 뜨거운 밤 골목입니다.</p>
+<ul class="tips"><li>2호선 을지로3가역에서 걸어 3분 · 밤 7시 이후 매우 붐빕니다</li><li>좌석이 좁고 서서 마시는 곳도 많아 가벼운 옷차림이 편해요</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>커피한약방 <em>Coffee Hanyakbang</em></h3><span class="pill">🚇 을지로3가역 도보 4분</span></div>
+<p class="meta">🕒 10:00–22:00 · 토 11:00–22:00 · 일 11:00–20:00</p>
+<p class="desc">옛 한약방 건물을 그대로 살린 골목 카페. 낮에 을지로를 걷다 쉬어 가기 좋습니다.</p>
+<ul class="tips"><li>간판이 작고 골목 안쪽이라 지도 앱으로 위치 확인</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>동대문 닭한마리 골목 <em>Dakhanmari Alley</em></h3><span class="pill">🚶 16분 · 1.0km</span></div>
+<p class="meta">🕒 진옥화할매 10:30–01:00</p>
+<p class="desc">닭 한 마리를 통째로 끓인 칼국수 사발 '닭한마리' 골목. 2~3명이 한 마리, 마지막에 칼국수 사리를 넣어 마무리합니다.</p>
+<ul class="tips"><li>진옥화할매원조닭한마리 본점이 가장 유명 · 웨이팅 있음</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>우래옥 <em>Woo Lae Oak</em></h3><span class="pill">🚶 18분 · 1.2km</span></div>
+<p class="meta">🕒 11:30–21:00 · 월요일 휴무</p>
+<p class="desc">1946년부터 이어진 평양냉면 노포. 담백한 육수와 불고기를 함께 내는 곳으로, 처음 평양냉면을 먹는 분께 무난합니다.</p>
+<ul class="tips"><li>점심시간 대기 있음 · 월요일은 문을 닫습니다</li></ul>
+</article>
+</section>
+<section class="sec" id="ko-2">
+<div class="sec-h"><span class="num">02</span><div><h2>4호선 2~3정거장</h2><p>명동 · 남대문시장</p></div></div>
+<article class="card">
+<div class="top"><h3>명동교자 본점 <em>Myeongdong Kyoja</em></h3><span class="pill">🚇 4호선 2정거장 · 약 10분</span></div>
+<p class="meta">🕒 매일 10:30–21:00</p>
+<p class="desc">1966년부터 칼국수·만두 한 가지만 하는 집. 진한 닭육수 칼국수와 왕만두가 대표 메뉴입니다.</p>
+<ul class="tips"><li>명동역에서 도보 3분 · 대기 줄이 길면 2층 좌석 확인</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>명동 거리 · 환전 <em>Myeongdong Street</em></h3><span class="pill">🚇 4호선 2정거장</span></div>
+<p class="meta">🕒 상점 대부분 10:00–21:00 무렵</p>
+<p class="desc">화장품·패션·간식이 모인 대표 번화가. 사설 환전소가 많고 은행보다 환율이 나은 편입니다.</p>
+<ul class="tips"><li>환전할 때 여권을 챙기세요</li><li>저녁 9시 이후에는 문을 닫는 가게가 늘어납니다</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>명동성당 <em>Myeongdong Cathedral</em></h3><span class="pill">🚇 명동역 도보 5분</span></div>
+<p class="meta">🕒 06:30–19:30 · 일요일 06:30–22:00</p>
+<p class="desc">1898년에 지어진 고딕 양식 성당. 무료로 들어갈 수 있고, 붉은 벽돌 건물과 계단이 사진 찍기 좋습니다.</p>
+<ul class="tips"><li>미사 시간에는 관람을 잠시 멈추고 조용히 해 주세요</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>남대문시장 · 갈치조림 골목 <em>Namdaemun Market</em></h3><span class="pill">🚇 4호선 3정거장 · 회현역</span></div>
+<p class="meta">🕒 시장 상가 09:00–17:00 · 갈치조림 골목 10:00–22:00</p>
+<p class="desc">600년 역사의 종합시장. 갈치조림 골목, 호떡·칼국수 노점, 잡화·안경·기념품까지 한 번에 볼 수 있습니다.</p>
+<ul class="tips"><li>시장 상가는 일요일에 쉬는 곳이 많습니다 — 일요일 방문 전 확인</li><li>물건을 살 때는 소액 현금이 편합니다</li></ul>
+</article>
+</section>
+<section class="sec" id="ko-3">
+<div class="sec-h"><span class="num">03</span><div><h2>2호선 직통</h2><p>성수동 · 홍대</p></div></div>
+<article class="card">
+<div class="top"><h3>성수동 카페거리 · 연무장길 <em>Seongsu-dong</em></h3><span class="pill">🚇 2호선 6정거장 · 약 20분</span></div>
+<p class="meta">🕒 어니언 성수 08:00–22:00(주말 09:00–) · 대림창고 11:00–22:00</p>
+<p class="desc">공장과 창고를 개조한 카페·편집숍 동네. '서울의 브루클린'이라 불리고, 주말마다 팝업스토어가 열립니다.</p>
+<ul class="tips"><li>연무장길에 무신사 스탠다드 성수·올리브영 N성수 등 편집숍이 모여 있습니다</li><li>평일 오전이 한산, 주말 오후는 매우 붐빕니다</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>홍대 거리 · 걷고싶은거리 <em>Hongdae</em></h3><span class="pill">🚇 2호선 9정거장 · 약 20분</span></div>
+<p class="meta">🕒 거리는 상시 · 카페·바는 늦은 밤까지</p>
+<p class="desc">버스킹과 인디 공연, 카페·바·빈티지숍이 모인 젊은 동네. 저녁에 걸으며 구경하기 좋습니다.</p>
+<ul class="tips"><li>홍대입구역에서 공항철도(AREX)로 인천공항까지 환승 없이 갈 수 있습니다(약 65분)</li></ul>
+</article>
+</section>
+<section class="sec" id="ko-4">
+<div class="sec-h"><span class="num">04</span><div><h2>교통 · 공항</h2><p>DDP 기준 이동 팁</p></div></div>
+<article class="card">
+<div class="top"><h3>지하철 <em>Subway</em></h3><span class="pill">📍 2·4·5호선 환승역</span></div>
+<p class="meta">💳 기본요금 1,550원(교통카드) · 1회용 1,650원</p>
+<p class="desc">숙소 기준 가장 가까운 역은 동대문역사문화공원역입니다. 2호선(성수·홍대 방면), 4호선(명동·서울역 방면), 5호선을 한 번에 씁니다.</p>
+<ul class="tips"><li>교통카드는 편의점에서 구매·충전</li><li>막차 시각은 노선·요일마다 다르니 지도 앱에서 확인</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>공항버스 6001 <em>Airport Bus 6001</em></h3><span class="pill">🚌 DDP 앞 정류장</span></div>
+<p class="meta">🕒 첫차 04:36 · 막차 19:56 (2026-11 기준) · 17,000원</p>
+<p class="desc">인천공항까지 환승 없이 가는 리무진. 동대문DDP 정류장에서 타면 약 70~90분 걸립니다.</p>
+<ul class="tips"><li>예약 없이 선착순 · 현금 또는 교통카드로 결제</li><li>공항에서 시내로 올 때는 정류장 순서가 달라 일부 정류장을 지나지 않습니다</li><li>막차가 이르니 오후 늦은 출국은 공항철도가 안전합니다</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>공항철도 (AREX) <em>Airport Railroad</em></h3><span class="pill">🚇 서울역 · 홍대입구역</span></div>
+<p class="meta">🎫 일반열차 4,750원(서울역→T1) · 직통열차 13,000원·43분</p>
+<p class="desc">4호선으로 서울역까지 간 뒤(4정거장) 공항철도로 갈아타는 경로가 가장 촘촘합니다. 홍대입구역에서도 바로 탑승할 수 있습니다.</p>
+<ul class="tips"><li>직통열차는 서울역에서만 탑승 · 좌석 지정, 별도 승차권 구매</li><li>일반열차는 교통카드로 탑승 · 홍대입구역에서 인천공항까지 약 65분</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>택시 · 심야 이동 <em>Taxi & late night</em></h3><span class="pill">🌙 지하철 막차 이후</span></div>
+<p class="meta">📱 카카오T(Kakao T) · 우버(Uber) 앱 호출</p>
+<p class="desc">DDP 앞과 큰길에서 택시를 잡기 쉽습니다. 밤늦게는 앱으로 호출하면 목적지를 한국어로 보여 주지 않아도 됩니다.</p>
+<ul class="tips"><li>기사님께 목적지 주소를 보여 주는 것이 가장 확실합니다</li><li>심야버스는 노선이 적어 앱에서 경로를 확인한 뒤 이용하세요</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>현지 팁 <em>Good to know</em></h3><span class="pill">💡</span></div>
+<p class="desc">식당에서는 물과 반찬이 무료로 나오고 팁은 없습니다. 계산은 대부분 카운터에서 합니다.</p>
+<ul class="tips"><li>대부분의 가게가 카드 결제를 받지만, 시장 노점은 현금이 편합니다</li><li>무료 와이파이는 카페에서 비밀번호를 물어보면 됩니다</li></ul>
+</article>
+</section>
+<div class="warn">외출 전에 영업 여부를 지도 앱에서 한 번 더 확인하시길 권합니다. 특히 명절·일요일에는 문을 닫는 가게가 많습니다.</div>
+<div class="foot"><strong>Ziro 280 stay · Around the stay</strong><br>영업시간·요금은 2026년 11월 20일 확인 기준이며, 현장 사정과 계절에 따라 달라질 수 있습니다. 출발점은 DDP · 을지로 280 일대입니다.</div>
+</div>
+<div class="lang-panel" data-lang="en">
+<section class="hero">
+<p class="kicker">DDP · EULJIRO 280</p>
+<h1>Around the stay</h1>
+<p class="sub">Step out the door, or ride two or three stops. Where to eat, what to see, and how to get around — for our guests.</p>
+<p class="base">Based at Dongdaemun History & Culture Park Station (Lines 2 · 4 · 5) · 3 min walk to DDP</p>
+</section>
+<nav class="chips">
+<a href="#en-1">On foot</a>
+<a href="#en-2">Line 4 · Myeongdong</a>
+<a href="#en-3">Line 2 · Seongsu/Hongdae</a>
+<a href="#en-4">Transit & airport</a>
+</nav>
+<section class="sec" id="en-1">
+<div class="sec-h"><span class="num">01</span><div><h2>On foot · one stop</h2><p>DDP · Gwangjang Market · Euljiro</p></div></div>
+<article class="card">
+<div class="top"><h3>Dongdaemun Design Plaza (DDP) <em>DDP · Design Store</em></h3><span class="pill">🚶 3 min · 200 m</span></div>
+<p class="meta">🕒 Daily 10:00–20:00 · outdoor plaza always open</p>
+<p class="desc">Zaha Hadid's curved landmark. Exhibitions, markets and pop-ups run all year, and the illuminated facade is at its best after dark.</p>
+<ul class="tips"><li>Pick up design souvenirs at the DDP Design Store, B2 of the Eoullim Plaza</li><li>Some exhibitions are free, some ticketed — check the sign at the entrance</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Gwangjang Market <em>광장시장</em></h3><span class="pill">🚶 24 min · 1.5 km</span></div>
+<p class="meta">🕒 Stalls vary · roughly late morning to about 21:00</p>
+<p class="desc">A century-old covered market famous for mung-bean pancakes (bindaetteok), raw beef (yukhoe) and knife-cut noodles. Tables line the narrow aisles; upstairs is vintage clothing and hanbok.</p>
+<ul class="tips"><li>Soonhine Bindaetteok 10:00–21:00 · Buchon Yukhoe 10:00–21:00</li><li>A few stalls take cash only — carry a little cash</li><li>Weekend lunch queues are long; arriving before 11:00 helps</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Euljiro Nogari Alley · Manseon Hof <em>을지로 노가리골목</em></h3><span class="pill">🚇 Line 2, 2 stops · or 27 min walk</span></div>
+<p class="meta">🕒 Evening to around midnight · Manseon Hof 12:00–24:00</p>
+<p class="desc">Old-school beer houses in the alleys of Euljiro 3-ga. Dried fish and draft beer — the liveliest night street in Seoul right now.</p>
+<ul class="tips"><li>3 min from Euljiro 3-ga Stn (Line 2); very busy after 19:00</li><li>Seating is tight and some spots are standing-only</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Coffee Hanyakbang <em>커피한약방</em></h3><span class="pill">🚇 4 min from Euljiro 3-ga Stn</span></div>
+<p class="meta">🕒 Mon–Fri 10:00–22:00 · Sat 11:00–22:00 · Sun 11:00–20:00</p>
+<p class="desc">A cafe tucked in an alley inside a former herbal-medicine shop. A good daytime rest stop while exploring Euljiro.</p>
+<ul class="tips"><li>The sign is small and set back in the alley — follow the map pin</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Dongdaemun Dakhanmari Alley <em>동대문 닭한마리 골목</em></h3><span class="pill">🚶 16 min · 1.0 km</span></div>
+<p class="meta">🕒 Jinokhwa Halmae 10:30–01:00</p>
+<p class="desc">A whole chicken simmered in broth, eaten with noodles — 'dakhanmari'. One pot serves two to three; finish with a portion of knife-cut noodles.</p>
+<ul class="tips"><li>Jinokhwa Halmae is the best-known shop; expect a short wait</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Woo Lae Oak <em>우래옥</em></h3><span class="pill">🚶 18 min · 1.2 km</span></div>
+<p class="meta">🕒 11:30–21:00 · closed Mondays</p>
+<p class="desc">A Pyongyang-style cold noodle institution since 1946. Mild, clean broth and grilled bulgogi — a gentle first try for cold noodles.</p>
+<ul class="tips"><li>Queues at lunch · closed on Mondays</li></ul>
+</article>
+</section>
+<section class="sec" id="en-2">
+<div class="sec-h"><span class="num">02</span><div><h2>Line 4 · 2–3 stops</h2><p>Myeongdong · Namdaemun Market</p></div></div>
+<article class="card">
+<div class="top"><h3>Myeongdong Kyoja <em>명동교자</em></h3><span class="pill">🚇 Line 4, 2 stops · about 10 min</span></div>
+<p class="meta">🕒 Daily 10:30–21:00</p>
+<p class="desc">Since 1966 this shop has served just a handful of dishes: rich chicken-broth kalguksu and large steamed dumplings.</p>
+<ul class="tips"><li>3 min on foot from Myeongdong Stn · if the queue is long, ask about upstairs seating</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Myeongdong street · money exchange <em>명동 거리</em></h3><span class="pill">🚇 Line 4, 2 stops</span></div>
+<p class="meta">🕒 Most shops 10:00–21:00</p>
+<p class="desc">Seoul's busiest shopping street for cosmetics, fashion and snacks. Private exchange booths here usually beat bank rates.</p>
+<ul class="tips"><li>Bring your passport for currency exchange</li><li>Fewer shops open after 21:00</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Myeongdong Cathedral <em>명동성당</em></h3><span class="pill">🚇 5 min from Myeongdong Stn</span></div>
+<p class="meta">🕒 06:30–19:30 · Sunday until 22:00</p>
+<p class="desc">A red-brick Gothic cathedral from 1898. Entry is free and the steps in front are a favourite photo spot.</p>
+<ul class="tips"><li>Please stay quiet and pause your visit during mass</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Namdaemun Market · braised hairtail alley <em>남대문시장</em></h3><span class="pill">🚇 Line 4, 3 stops · Hoehyeon Stn</span></div>
+<p class="meta">🕒 Shops 09:00–17:00 · hairtail alley 10:00–22:00</p>
+<p class="desc">A 600-year-old market: braised hairtail (galchi-jorim) alley, hotteok and noodle stalls, plus glasses, bags and souvenirs.</p>
+<ul class="tips"><li>Many shops close on Sundays — check before a Sunday visit</li><li>Cash is easier for small purchases</li></ul>
+</article>
+</section>
+<section class="sec" id="en-3">
+<div class="sec-h"><span class="num">03</span><div><h2>Line 2, direct</h2><p>Seongsu-dong · Hongdae</p></div></div>
+<article class="card">
+<div class="top"><h3>Seongsu-dong cafe street · Yeonmujang-gil <em>성수동</em></h3><span class="pill">🚇 Line 2, 6 stops · about 20 min</span></div>
+<p class="meta">🕒 Cafe Onion 08:00–22:00 (weekends from 09:00) · Daelim Changgo 11:00–22:00</p>
+<p class="desc">Factories and warehouses turned into cafes and concept stores — Seoul's 'Brooklyn'. Pop-up stores open here most weekends.</p>
+<ul class="tips"><li>Yeonmujang-gil holds Musinsa Standard and Olive Young N Seongsu, among many small labels</li><li>Quiet on weekday mornings, packed on weekend afternoons</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Hongdae · Walking Street <em>홍대</em></h3><span class="pill">🚇 Line 2, 9 stops · about 20 min</span></div>
+<p class="meta">🕒 Street always open · cafes and bars until late</p>
+<p class="desc">Buskers, indie gigs, cafes, bars and vintage shops. Best explored on foot in the evening.</p>
+<ul class="tips"><li>Hongik Univ. Station connects to the AREX airport line — Incheon Airport without a transfer, about 65 min</li></ul>
+</article>
+</section>
+<section class="sec" id="en-4">
+<div class="sec-h"><span class="num">04</span><div><h2>Getting around</h2><p>From DDP, and to the airport</p></div></div>
+<article class="card">
+<div class="top"><h3>Subway <em>지하철</em></h3><span class="pill">📍 Lines 2 · 4 · 5</span></div>
+<p class="meta">💳 Base fare 1,550 KRW (transit card) · 1,650 KRW single ticket</p>
+<p class="desc">The nearest station is Dongdaemun History & Culture Park, served by Line 2 (Seongsu, Hongdae), Line 4 (Myeongdong, Seoul Stn) and Line 5.</p>
+<ul class="tips"><li>Buy and top up a transit card at any convenience store</li><li>Last-train times differ by line and weekday — check a map app</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Airport Bus 6001 <em>공항버스 6001</em></h3><span class="pill">🚌 DDP stop, in front</span></div>
+<p class="meta">🕒 First 04:36 · last 19:56 (Nov 2026) · 17,000 KRW</p>
+<p class="desc">A limousine bus straight to Incheon Airport. From the Dongdaemun DDP stop it takes about 70–90 minutes.</p>
+<ul class="tips"><li>No reservation — first come, first served; pay cash or with a transit card</li><li>Coming from the airport, the stop order differs and some city stops are skipped</li><li>The last bus is early; for late-afternoon departures the airport train is safer</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>AREX airport railroad <em>공항철도</em></h3><span class="pill">🚇 Seoul Stn · Hongik Univ. Stn</span></div>
+<p class="meta">🎫 All-stop 4,750 KRW (Seoul Stn→T1) · express 13,000 KRW, 43 min</p>
+<p class="desc">Take Line 4 to Seoul Station (4 stops) and change to the airport railroad. You can also board at Hongik Univ. Station.</p>
+<ul class="tips"><li>The express train starts at Seoul Station only, with assigned seats and a separate ticket</li><li>All-stop trains accept transit cards; Hongik Univ. Stn to Incheon Airport takes about 65 min</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Taxi & late night <em>택시</em></h3><span class="pill">🌙 After the last train</span></div>
+<p class="meta">📱 Hail with the Kakao T or Uber app</p>
+<p class="desc">Taxis are easy to find in front of DDP and on the main road. At night, an app ride is simplest — you don't need to explain the address in Korean.</p>
+<ul class="tips"><li>Showing the driver the address on your phone is the surest way</li><li>Night buses are limited — check the route in an app first</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>Good to know <em>현지 팁</em></h3><span class="pill">💡</span></div>
+<p class="desc">Water and side dishes are free in restaurants, and tipping is not expected. Pay at the counter on your way out.</p>
+<ul class="tips"><li>Cards work almost everywhere, but cash is easier at market stalls</li><li>For cafe Wi-Fi, just ask staff for the password</li></ul>
+</article>
+</section>
+<div class="warn">We recommend checking opening hours in a map app before you set out — many places close on Sundays and public holidays.</div>
+<div class="foot"><strong>Ziro 280 stay · Around the stay</strong><br>Opening hours and fares were checked on 20 November 2026 and may change with the season or the shop. The starting point is the DDP · Euljiro 280 area.</div>
+</div>
+<div class="lang-panel" data-lang="ja">
+<section class="hero">
+<p class="kicker">DDP · 乙支路 280</p>
+<h1>ステイのまわりをひと回り</h1>
+<p class="sub">玄関から歩いて、地下鉄で2〜3駅。ゲストのためのグルメ・観光・交通ガイドです。</p>
+<p class="base">基準：東大門歴史文化公園駅（2・4・5号線）／DDPまで徒歩3分</p>
+</section>
+<nav class="chips">
+<a href="#ja-1">徒歩圏</a>
+<a href="#ja-2">4号線・明洞</a>
+<a href="#ja-3">2号線・聖水/弘大</a>
+<a href="#ja-4">交通・空港</a>
+</nav>
+<section class="sec" id="ja-1">
+<div class="sec-h"><span class="num">01</span><div><h2>徒歩圏 · ひと駅</h2><p>DDP · 広蔵市場 · 乙支路</p></div></div>
+<article class="card">
+<div class="top"><h3>東大門デザインプラザ（DDP） <em>동대문디자인플라자</em></h3><span class="pill">🚶 3分 · 200m</span></div>
+<p class="meta">🕒 毎日 10:00–20:00 · 屋外広場は常時開放</p>
+<p class="desc">ザハ・ハディド設計の曲面建築。展示やマーケット、ポップアップが開かれ、ライトアップされた夜の姿が特に美しい場所です。</p>
+<ul class="tips"><li>地下2階オリム広場の「DDPデザインストア」でお土産やデザイン雑貨を</li><li>展示は有料・無料が混在。入口の案内板でご確認ください</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>広蔵市場（クァンジャン市場） <em>광장시장</em></h3><span class="pill">🚶 24分 · 1.5km</span></div>
+<p class="meta">🕒 店ごとに異なる · おおよそ昼から21時ごろまで</p>
+<p class="desc">緑豆チヂミ（ピンデトッ）、ユッケ、カルグクスで有名な100年余りの市場。狭い通路に屋台のテーブルが並び、2階は古着と韓服の店です。</p>
+<ul class="tips"><li>スニネ・ピンデトッ 10:00–21:00 · プチョン・ユクェ 10:00–21:00</li><li>現金のみの屋台もあるので小額の現金があると安心です</li><li>週末の昼は行列が長いので、11時前の早めの昼食がおすすめ</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>乙支路ノガリ横丁 · マンソンホフ <em>을지로 노가리골목</em></h3><span class="pill">🚇 2号線2駅 · 徒歩なら27分</span></div>
+<p class="meta">🕒 夕方から深夜0時ごろ · マンソンホフ 12:00–24:00</p>
+<p class="desc">乙支路3街の路地に続く老舗のビール横丁。干し魚と生ビールで、いまソウルで最も熱い夜の路地です。</p>
+<ul class="tips"><li>2号線乙支路3街駅から徒歩3分 · 19時以降は非常に混みます</li><li>席が狭く立ち飲みの店もあるので、軽い服装が楽です</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>コーヒー韓薬房 <em>커피한약방</em></h3><span class="pill">🚇 乙支路3街駅から徒歩4分</span></div>
+<p class="meta">🕒 10:00–22:00 · 土11:00–22:00 · 日11:00–20:00</p>
+<p class="desc">昔の韓薬房の建物をそのまま使った路地のカフェ。日中の乙支路散策の休憩にちょうどよいです。</p>
+<ul class="tips"><li>看板が小さく路地の奥にあるので、地図アプリで位置を確認してください</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>東大門タッカンマリ横丁 <em>동대문 닭한마리 골목</em></h3><span class="pill">🚶 16分 · 1.0km</span></div>
+<p class="meta">🕒 チノクファ・ハルメ 10:30–01:00</p>
+<p class="desc">鶏を一羽まるごと煮込む「タッカンマリ」の横丁。1鍋で2〜3人分、最後にカルグクスを入れて締めるのが定番です。</p>
+<ul class="tips"><li>チノクファ・ハルメ本店が最も有名 · 待ち時間あり</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>ウレオク（又来屋） <em>우래옥</em></h3><span class="pill">🚶 18分 · 1.2km</span></div>
+<p class="meta">🕒 11:30–21:00 · 月曜定休</p>
+<p class="desc">1946年創業の平壌冷麺の老舗。あっさりしたスープとプルコギが看板で、初めての平壌冷麺にも無理なくおすすめできます。</p>
+<ul class="tips"><li>昼どきは待ちます · 月曜日は休みです</li></ul>
+</article>
+</section>
+<section class="sec" id="ja-2">
+<div class="sec-h"><span class="num">02</span><div><h2>4号線 2〜3駅</h2><p>明洞 · 南大門市場</p></div></div>
+<article class="card">
+<div class="top"><h3>明洞餃子 本店 <em>명동교자</em></h3><span class="pill">🚇 4号線2駅 · 約10分</span></div>
+<p class="meta">🕒 毎日 10:30–21:00</p>
+<p class="desc">1966年からカルグクスと餃子だけを出す店。濃い鶏スープのカルグクスと大きな蒸し餃子が看板メニューです。</p>
+<ul class="tips"><li>明洞駅から徒歩3分 · 行列が長いときは2階の席も確認を</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>明洞の街 · 両替 <em>명동 거리</em></h3><span class="pill">🚇 4号線2駅</span></div>
+<p class="meta">🕒 多くの店 10:00–21:00ごろ</p>
+<p class="desc">コスメ・ファッション・軽食が集まるソウル有数の繁華街。私設の両替所が多く、銀行よりレートが良いことが多いです。</p>
+<ul class="tips"><li>両替にはパスポートをお持ちください</li><li>21時以降は閉まる店が増えます</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>明洞聖堂 <em>명동성당</em></h3><span class="pill">🚇 明洞駅から徒歩5分</span></div>
+<p class="meta">🕒 06:30–19:30 · 日曜は22:00まで</p>
+<p class="desc">1898年に建てられた赤レンガのゴシック聖堂。無料で見学でき、前の階段は写真スポットとして人気です。</p>
+<ul class="tips"><li>ミサの時間は見学を控え、静かにお願いします</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>南大門市場 · タチウオ煮込み横丁 <em>남대문시장</em></h3><span class="pill">🚇 4号線3駅 · 会賢駅</span></div>
+<p class="meta">🕒 商店 09:00–17:00 · タチウオ横丁 10:00–22:00</p>
+<p class="desc">600年の歴史をもつ総合市場。タチウオの煮込み（カルチョリム）横丁、ホットクやカルグクスの屋台、メガネ・雑貨・お土産まで揃います。</p>
+<ul class="tips"><li>商店は日曜定休が多いので、日曜の訪問前にご確認を</li><li>買い物は小額の現金が便利です</li></ul>
+</article>
+</section>
+<section class="sec" id="ja-3">
+<div class="sec-h"><span class="num">03</span><div><h2>2号線 直通</h2><p>聖水洞 · 弘大</p></div></div>
+<article class="card">
+<div class="top"><h3>聖水洞カフェ通り · 練武場キル <em>성수동</em></h3><span class="pill">🚇 2号線6駅 · 約20分</span></div>
+<p class="meta">🕒 カフェ・オニオン聖水 08:00–22:00（週末09:00〜）· テリムチャンゴ 11:00–22:00</p>
+<p class="desc">工場や倉庫を改装したカフェとセレクトショップの街。「ソウルのブルックリン」と呼ばれ、週末はポップアップストアが開きます。</p>
+<ul class="tips"><li>練武場キルにはムシンサ・スタンダード聖水店、オリーブヤングN聖水などが並びます</li><li>平日の午前は空いていて、週末の午後は非常に混みます</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>弘大 · 歩きたい通り <em>홍대</em></h3><span class="pill">🚇 2号線9駅 · 約20分</span></div>
+<p class="meta">🕒 通りは常時 · カフェ・バーは深夜まで</p>
+<p class="desc">ストリートライブとインディー公演、カフェ、バー、ヴィンテージショップが集まる若者の街。夕方に歩いて散策するのが楽しいです。</p>
+<ul class="tips"><li>弘大入口駅から空港鉄道（AREX）で仁川空港まで乗り換えなし・約65分</li></ul>
+</article>
+</section>
+<section class="sec" id="ja-4">
+<div class="sec-h"><span class="num">04</span><div><h2>交通 · 空港</h2><p>DDPからの移動のヒント</p></div></div>
+<article class="card">
+<div class="top"><h3>地下鉄 <em>지하철</em></h3><span class="pill">📍 2・4・5号線</span></div>
+<p class="meta">💳 基本運賃 1,550ウォン（交通カード）· 1回券 1,650ウォン</p>
+<p class="desc">最寄り駅は東大門歴史文化公園駅。2号線（聖水・弘大方面）、4号線（明洞・ソウル駅方面）、5号線が使えます。</p>
+<ul class="tips"><li>交通カードはコンビニで購入・チャージできます</li><li>終電の時刻は路線・曜日で異なるので地図アプリで確認を</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>空港リムジン 6001番 <em>공항버스 6001</em></h3><span class="pill">🚌 DDP前の停留所</span></div>
+<p class="meta">🕒 初発 04:36 · 終発 19:56（2026年11月時点）· 17,000ウォン</p>
+<p class="desc">仁川空港まで乗り換えなしのリムジン。東大門DDP停留所から約70〜90分です。</p>
+<ul class="tips"><li>予約なしの先着順 · 現金または交通カードで支払い</li><li>空港から市内へ向かう便は停留所の順番が違い、一部を経由しません</li><li>終発が早いので、午後遅めの出国は空港鉄道が安心です</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>空港鉄道（AREX） <em>공항철도</em></h3><span class="pill">🚇 ソウル駅 · 弘大入口駅</span></div>
+<p class="meta">🎫 一般列車 4,750ウォン（ソウル駅→T1）· 直通列車 13,000ウォン・43分</p>
+<p class="desc">4号線でソウル駅まで行き（4駅）、空港鉄道に乗り換えるルートが最も本数が多いです。弘大入口駅からも乗れます。</p>
+<ul class="tips"><li>直通列車はソウル駅始発・指定席で、別途乗車券が必要です</li><li>一般列車は交通カードで乗車可 · 弘大入口駅から仁川空港まで約65分</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>タクシー · 深夜の移動 <em>택시</em></h3><span class="pill">🌙 終電後</span></div>
+<p class="meta">📱 Kakao T・Uberアプリで配車</p>
+<p class="desc">DDP前や大通りでタクシーを拾いやすいです。夜遅くはアプリ配車が簡単で、目的地を韓国語で伝える必要がありません。</p>
+<ul class="tips"><li>運転手にスマホで住所を見せるのが確実です</li><li>深夜バスは路線が少ないので、アプリで経路を確認してから</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>知っておくと便利 <em>현지 팁</em></h3><span class="pill">💡</span></div>
+<p class="desc">食堂では水とおかずが無料、チップは不要です。会計はほとんどがレジ（カウンター）でします。</p>
+<ul class="tips"><li>ほとんどの店でカードが使えますが、市場の屋台は現金が便利です</li><li>カフェのWi-Fiはスタッフにパスワードを聞けば使えます</li></ul>
+</article>
+</section>
+<div class="warn">お出かけ前に、地図アプリで営業状況をもう一度ご確認ください。特に日曜・祝日は休みの店が多くなります。</div>
+<div class="foot"><strong>Ziro 280 stay · Around the stay</strong><br>営業時間・料金は2026年11月20日時点の確認によるもので、季節や店の事情で変わることがあります。出発点はDDP・乙支路280周辺です。</div>
+</div>
+<div class="lang-panel" data-lang="zh">
+<section class="hero">
+<p class="kicker">DDP · 乙支路 280</p>
+<h1>住所周边一圈</h1>
+<p class="sub">出门步行，或乘地铁两三站。为住客准备的美食、景点与交通指南。</p>
+<p class="base">基准：东大门历史文化公园站（2·4·5号线）· 步行3分钟到DDP</p>
+</section>
+<nav class="chips">
+<a href="#zh-1">步行圈</a>
+<a href="#zh-2">4号线·明洞</a>
+<a href="#zh-3">2号线·圣水/弘大</a>
+<a href="#zh-4">交通·机场</a>
+</nav>
+<section class="sec" id="zh-1">
+<div class="sec-h"><span class="num">01</span><div><h2>步行 · 一站</h2><p>DDP · 广藏市场 · 乙支路</p></div></div>
+<article class="card">
+<div class="top"><h3>东大门设计广场（DDP） <em>동대문디자인플라자</em></h3><span class="pill">🚶 3分钟 · 200米</span></div>
+<p class="meta">🕒 每天 10:00–20:00 · 室外广场全天开放</p>
+<p class="desc">扎哈·哈迪德设计的曲面建筑。常年有展览、市集和快闪活动，入夜亮灯后的夜景尤其值得一看。</p>
+<ul class="tips"><li>地下2层“和谐广场”的DDP设计商店可以买纪念品和设计小物</li><li>展览有的免费有的收费，请看清入口处的告示</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>广藏市场 <em>광장시장</em></h3><span class="pill">🚶 24分钟 · 1.5公里</span></div>
+<p class="meta">🕒 各摊不同 · 大致从中午到21点左右</p>
+<p class="desc">以绿豆煎饼、生拌牛肉、刀削面闻名的百年市场。狭窄的通道两旁摆满摊位餐桌，二楼是旧衣与韩服商铺。</p>
+<ul class="tips"><li>顺姬绿豆煎饼 10:00–21:00 · 富村生拌牛肉 10:00–21:00</li><li>有些摊位只收现金，随身带些零钱更方便</li><li>周末中午排队较长，建议11点前吃午饭</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>乙支路烤鱼干胡同 · 万善啤酒店 <em>을지로 노가리골목</em></h3><span class="pill">🚇 2号线2站 · 步行27分钟</span></div>
+<p class="meta">🕒 傍晚至午夜 · 万善啤酒店 12:00–24:00</p>
+<p class="desc">乙支路3街巷子里的老式啤酒街，烤鱼干配生啤，是当下首尔最热闹的夜巷。</p>
+<ul class="tips"><li>2号线乙支路3街站步行3分钟 · 晚上7点以后非常拥挤</li><li>座位窄，也有站着喝的店，穿轻便些更方便</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>韩药房咖啡 <em>커피한약방</em></h3><span class="pill">🚇 乙支路3街站步行4分钟</span></div>
+<p class="meta">🕒 10:00–22:00 · 周六11:00–22:00 · 周日11:00–20:00</p>
+<p class="desc">把旧韩药房原样保留下来的巷内咖啡馆，白天逛乙支路时正好歇脚。</p>
+<ul class="tips"><li>招牌很小又在巷子深处，请用地图App找位置</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>东大门一只鸡胡同 <em>동대문 닭한마리 골목</em></h3><span class="pill">🚶 16分钟 · 1.0公里</span></div>
+<p class="meta">🕒 陈玉华奶奶 10:30–01:00</p>
+<p class="desc">把整只鸡下锅煮的“一只鸡”胡同。一锅够2~3人，最后加一份刀削面收尾是标准吃法。</p>
+<ul class="tips"><li>陈玉华奶奶一只鸡本店最有名 · 需要等位</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>又来屋 <em>우래옥</em></h3><span class="pill">🚶 18分钟 · 1.2公里</span></div>
+<p class="meta">🕒 11:30–21:00 · 周一休息</p>
+<p class="desc">1946年开业的平壤冷面老店，汤头清淡，配烤牛肉，第一次吃平壤冷面来这里比较稳妥。</p>
+<ul class="tips"><li>午餐时段要排队 · 周一不营业</li></ul>
+</article>
+</section>
+<section class="sec" id="zh-2">
+<div class="sec-h"><span class="num">02</span><div><h2>4号线 2~3站</h2><p>明洞 · 南大门市场</p></div></div>
+<article class="card">
+<div class="top"><h3>明洞饺子 本店 <em>명동교자</em></h3><span class="pill">🚇 4号线2站 · 约10分钟</span></div>
+<p class="meta">🕒 每天 10:30–21:00</p>
+<p class="desc">1966年开业，只做刀削面和饺子：浓郁的鸡汤刀削面与大蒸饺是招牌。</p>
+<ul class="tips"><li>明洞站步行3分钟 · 排队较长时可问二楼座位</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>明洞街 · 换钱 <em>명동 거리</em></h3><span class="pill">🚇 4号线2站</span></div>
+<p class="meta">🕒 多数店铺 10:00–21:00</p>
+<p class="desc">化妆品、服饰和小吃云集的代表性商圈。私人换钱所很多，汇率通常比银行好。</p>
+<ul class="tips"><li>换钱请带护照</li><li>21点以后关门的店铺增多</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>明洞圣堂 <em>명동성당</em></h3><span class="pill">🚇 明洞站步行5分钟</span></div>
+<p class="meta">🕒 06:30–19:30 · 周日到22:00</p>
+<p class="desc">1898年建成的红砖哥特式教堂，免费参观，门前台阶是热门拍照点。</p>
+<ul class="tips"><li>弥撒时间请暂停参观并保持安静</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>南大门市场 · 炖带鱼胡同 <em>남대문시장</em></h3><span class="pill">🚇 4号线3站 · 会贤站</span></div>
+<p class="meta">🕒 商铺 09:00–17:00 · 炖带鱼胡同 10:00–22:00</p>
+<p class="desc">有600年历史的综合市场：炖带鱼胡同、糖饼与刀削面摊，还有眼镜、杂货和纪念品。</p>
+<ul class="tips"><li>很多商铺周日休息，周日前往请先确认</li><li>购物时用现金更方便</li></ul>
+</article>
+</section>
+<section class="sec" id="zh-3">
+<div class="sec-h"><span class="num">03</span><div><h2>2号线 直达</h2><p>圣水洞 · 弘大</p></div></div>
+<article class="card">
+<div class="top"><h3>圣水洞咖啡街 · 练兵场街 <em>성수동</em></h3><span class="pill">🚇 2号线6站 · 约20分钟</span></div>
+<p class="meta">🕒 Onion咖啡圣水 08:00–22:00（周末09:00起）· 大林仓库 11:00–22:00</p>
+<p class="desc">工厂和仓库改造成的咖啡馆与买手店街区，被称为“首尔的布鲁克林”，周末常有快闪店。</p>
+<ul class="tips"><li>练兵场街聚集了Musinsa Standard圣水店、Olive Young N圣水等店铺</li><li>工作日上午清静，周末下午非常拥挤</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>弘大 · 步行街 <em>홍대</em></h3><span class="pill">🚇 2号线9站 · 约20分钟</span></div>
+<p class="meta">🕒 街区全天开放 · 咖啡馆和酒吧营业到深夜</p>
+<p class="desc">街头演出、独立音乐、咖啡馆、酒吧和古着店聚集的年轻街区，傍晚散步最合适。</p>
+<ul class="tips"><li>弘大入口站可乘机场铁路（AREX）直达仁川机场，约65分钟，无需换乘</li></ul>
+</article>
+</section>
+<section class="sec" id="zh-4">
+<div class="sec-h"><span class="num">04</span><div><h2>交通 · 机场</h2><p>以DDP为起点的出行提示</p></div></div>
+<article class="card">
+<div class="top"><h3>地铁 <em>지하철</em></h3><span class="pill">📍 2·4·5号线</span></div>
+<p class="meta">💳 基本票价 1,550韩元（交通卡）· 单程票 1,650韩元</p>
+<p class="desc">最近的车站是东大门历史文化公园站，可乘2号线（圣水、弘大方向）、4号线（明洞、首尔站方向）和5号线。</p>
+<ul class="tips"><li>交通卡可在便利店购买和充值</li><li>末班车时间因线路和星期而异，请在地图App确认</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>机场巴士 6001路 <em>공항버스 6001</em></h3><span class="pill">🚌 DDP前站点</span></div>
+<p class="meta">🕒 首班 04:36 · 末班 19:56（2026年11月）· 17,000韩元</p>
+<p class="desc">直达仁川机场的机场大巴，从东大门DDP站上车约需70~90分钟。</p>
+<ul class="tips"><li>无需预约，先到先坐 · 现金或交通卡支付</li><li>从机场回市区时站点顺序不同，部分站点不停靠</li><li>末班车较早，下午晚些的航班建议乘机场铁路更稳妥</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>机场铁路（AREX） <em>공항철도</em></h3><span class="pill">🚇 首尔站 · 弘大入口站</span></div>
+<p class="meta">🎫 一般列车 4,750韩元（首尔站→T1）· 直达列车 13,000韩元·43分钟</p>
+<p class="desc">乘4号线到首尔站（4站）换乘机场铁路，班次最密；也可在弘大入口站直接上车。</p>
+<ul class="tips"><li>直达列车只在首尔站发车，对号入座，需另购车票</li><li>一般列车可用交通卡 · 弘大入口站到仁川机场约65分钟</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>出租车 · 深夜出行 <em>택시</em></h3><span class="pill">🌙 末班地铁之后</span></div>
+<p class="meta">📱 用Kakao T或Uber叫车</p>
+<p class="desc">DDP前和大路上都容易拦到出租车。深夜用App叫车最省事，不必用韩语说明地址。</p>
+<ul class="tips"><li>把地址显示的屏幕给司机看最稳妥</li><li>深夜巴士线路较少，请先在App确认路线</li></ul>
+</article>
+<article class="card">
+<div class="top"><h3>实用小贴士 <em>현지 팁</em></h3><span class="pill">💡</span></div>
+<p class="desc">餐厅的茶水和配菜免费，不需要给小费，结账大多在柜台。</p>
+<ul class="tips"><li>多数店铺可以刷卡，市场摊位用现金更方便</li><li>咖啡馆Wi-Fi的密码问一下店员即可</li></ul>
+</article>
+</section>
+<div class="warn">出门前建议在地图App再确认一次营业情况，周日和节假日休息的店铺尤其多。</div>
+<div class="foot"><strong>Ziro 280 stay · Around the stay</strong><br>营业时间与票价为2026年11月20日确认的信息，可能随季节和店铺情况变动。出发地为DDP·乙支路280一带。</div>
+</div>
+</main>
+</body>
+</html>
